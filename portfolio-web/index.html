@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ángel Belzunce, Backend Java</title>
+<meta name="description" content="Portfolio de Ángel Belzunce, desarrollador backend con Java y Spring Boot.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: perfil oscuro de una página. Héroe con nombre grande y ficha de stack a la derecha, sobre mí y tecnologías en dos columnas, proyectos como filas numeradas, contacto en una banda simple */
+:root {
+  --bg: #080c12;
+  --panel: #0e1520;
+  --line: #1c2a3b;
+  --ink: #eef3f8;
+  --muted: #92a2b5;
+  --accent: #2dd4bf;
+  --accent-2: #38bdf8;
+  --font: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.65; }
+a { color: inherit; text-underline-offset: 4px; }
+a:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; border-radius: 6px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+header { position: sticky; top: 0; z-index: 10; background: rgba(8,12,18,.88); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+header .wrap { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; padding-top: 14px; padding-bottom: 14px; }
+.logo { font-weight: 700; text-decoration: none; letter-spacing: -.01em; }
+.hicons { display: flex; align-items: center; gap: 10px; padding-bottom: 8px; }
+.hicons a { text-decoration: none; width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); color: var(--ink); }
+.hicons a:hover { border-color: var(--accent); color: var(--accent); }
+.hicons svg { width: 28px; height: 28px; fill: currentColor; }
+.hicons a.cvb svg { fill: none; }
+.hicons a.cvb { gap: 10px; grid-auto-flow: column; white-space: nowrap; width: auto; height: 56px; padding: 0 20px; border-radius: 999px; background: var(--accent); border-color: var(--accent); color: var(--bg); font-size: 16px; font-weight: 700; }
+.hicons a.cvb svg { width: 20px; height: 24px; }
+.hicons a.cvb:hover { background: var(--accent-2); border-color: var(--accent-2); color: var(--bg); }
+nav { display: flex; align-items: center; flex-wrap: wrap; gap: 2px 4px; }
+nav a { text-decoration: none; font-size: 14px; color: var(--muted); padding: 6px 12px; border-radius: 8px; }
+nav a:hover { color: var(--ink); }
+nav a.cv { color: var(--bg); background: var(--accent); font-weight: 600; margin-left: 8px; }
+nav a.cv:hover { background: var(--accent-2); }
+
+/* Héroe */
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr); gap: 48px; align-items: center; padding-top: 88px; padding-bottom: 88px; }
+.eyebrow { font-family: var(--mono); font-size: 13.5px; color: var(--accent); margin: 0 0 18px; }
+h1 { font-size: clamp(46px, 8vw, 88px); line-height: 1; letter-spacing: -.035em; font-weight: 800; margin: 0; }
+.namerow { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 20px 24px; margin-bottom: 14px; }
+h1 span { color: var(--accent); }
+.role { font-size: clamp(18px, 2.8vw, 24px); color: var(--accent); margin: 0 0 22px; font-weight: 700; letter-spacing: -.01em; }
+.lead { color: var(--muted); max-width: 36em; margin: 0 0 32px; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn { display: inline-block; padding: 12px 22px; border-radius: 999px; font-weight: 600; font-size: 14.5px; text-decoration: none; border: 1px solid var(--line); }
+.btn, .btn.primary, .btn.ghost { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn:hover { background: #cbd5e1; border-color: #cbd5e1; }
+.icons { display: flex; gap: 8px; margin-left: 6px; }
+.icons a { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line); }
+.icons a:hover { border-color: var(--accent); color: var(--accent); }
+.icons svg { width: 18px; height: 18px; fill: currentColor; }
+
+.ficha { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 8px 22px; }
+.ficha h2 { font-family: var(--mono); font-weight: 500; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+.ficha dl { margin: 0; }
+.ficha .row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
+.ficha .row:first-of-type { border-top: 0; }
+.ficha dt { color: var(--muted); font-size: 14px; }
+.ficha dd { margin: 0; font-weight: 600; font-size: 15px; text-align: right; }
+
+/* Secciones */
+section { padding: 64px 0 0; }
+.label { display: flex; align-items: center; gap: 14px; font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin: 0 0 28px; }
+.label::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.two { display: grid; grid-template-columns: 1fr 1.15fr; gap: 56px; }
+.about p:not(.label) { margin: 0; font-size: 19px; line-height: 1.7; max-width: 28em; }
+.tgroup { margin-bottom: 28px; }
+.tgroup h3 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.chips li { font-size: 14px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); }
+.chips.base li { border-color: rgba(45,212,191,.5); color: var(--accent); }
+
+.techs { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 18px 14px; list-style: none; margin: 0; padding: 0; }
+.techs li { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.techs .ico { width: 72px; height: 72px; border-radius: 18px; background: #f1f5f9; display: grid; place-items: center; border: 1px solid var(--line); transition: transform .2s; }
+.techs li:hover .ico { transform: translateY(-3px); }
+.techs .ico img { width: 40px; height: 40px; object-fit: contain; display: block; }
+.techs .tn { font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+
+/* Proyectos */
+.project { display: grid; grid-template-columns: 56px minmax(0, 1fr) 400px; gap: 8px 28px; align-items: center; padding: 36px 0; border-top: 1px solid var(--line); }
+.label + .project { border-top: 0; }
+.project:last-child { border-bottom: 1px solid var(--line); }
+.project .n { font-family: var(--mono); font-size: 30px; font-weight: 500; color: var(--line); line-height: 1.2; transition: color .2s; }
+.project:hover .n { color: var(--accent); }
+.project h3 { margin: 0 0 6px; font-size: 24px; letter-spacing: -.02em; }
+.project p { margin: 0 0 10px; color: var(--muted); max-width: 34em; }
+.project p.tech { max-width: none; } .project .tech { font-family: var(--mono); font-size: 12.5px; color: var(--accent-2); margin: 0; }
+.project > div, .project .shot { min-width: 0; }
+.project .shot { margin: 0; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: var(--panel); }
+.project .shot img { width: 100%; height: auto; display: block; }
+.project .go { display: inline-block; margin-top: 8px; text-decoration: none; font-weight: 600; font-size: 14px; padding: 9px 18px; background: var(--ink); border: 1px solid var(--ink); color: var(--bg); border-radius: 999px; white-space: nowrap; }
+.project .go:hover { background: #cbd5e1; border-color: #cbd5e1; }
+
+
+@media (max-width: 480px) {
+  .hicons a { width: 46px; height: 46px; }
+  .hicons svg { width: 23px; height: 23px; }
+  .hicons a.cvb { height: 46px; padding: 0 16px; font-size: 14.5px; gap: 7px; }
+  .hicons a.cvb svg { width: 20px; height: 20px; }
+}
+/* Flujo de datos */
+.project > div:not(.n):not(.carousel):not(.flow) { grid-column: 2 / -1; }
+.flow { grid-column: 2 / -1; margin-top: 14px; display: grid; gap: 18px; min-width: 0; }
+.lt { margin: 0 0 8px; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.fl { list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 8px; }
+.fn { flex: 0 1 200px; max-width: 270px; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 14px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+.fi { flex: none; width: 38px; height: 38px; display: grid; place-items: center; background: #f1f5f9; border-radius: 10px; }
+.fi img { width: 26px; height: 26px; display: block; }
+.ft { display: flex; flex-direction: column; min-width: 0; }
+.ft b { font-size: 16.5px; line-height: 1.25; color: var(--ink); overflow-wrap: break-word; }
+.fs { margin-top: 3px; font-size: 13.5px; line-height: 1.35; color: var(--accent); overflow-wrap: anywhere; }
+.fg { flex: 0 1 200px; min-width: 0; display: flex; }
+.fg ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.fg .fn { flex: 1 1 auto; max-width: none; }
+.fa { flex: none; display: grid; place-items: center; width: 26px; color: var(--muted); }
+.fa b { display: grid; place-items: center; line-height: 0; }
+.fa svg { display: block; }
+.fg .fa { width: auto; height: 30px; }
+.fg .fa .h { display: none; }
+.fg .fa .v { display: grid; }
+.fa .v { display: none; }
+.fa b { font-weight: 600; }
+.ent { margin: 0; color: var(--muted); font-size: 14.5px; }
+.ent span { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; margin-right: 12px; }
+
+
+/* Ver más */
+.more { grid-column: 2 / -1; margin-top: 6px; }
+.more summary { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; list-style: none; font-weight: 600; font-size: 14px; color: var(--ink); padding: 9px 18px; border: 1px solid var(--line); border-radius: 999px; }
+.more summary::-webkit-details-marker { display: none; }
+.more summary::after { content: "+"; font-size: 18px; line-height: 1; color: var(--accent); }
+.more[open] summary::after { content: "–"; }
+.more summary:hover { border-color: var(--accent); }
+.mb { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; margin-top: 18px; padding: 22px 24px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; }
+.mt { margin: 0 0 10px; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.mb ul { margin: 0; padding-left: 18px; color: var(--ink); font-size: 15px; line-height: 1.55; }
+.mb li + li { margin-top: 6px; }
+.mb ul.chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.mb ul.chips li { margin: 0; padding: 5px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13.5px; color: var(--accent-2); }
+
+/* Carrusel de capturas */
+.carousel { grid-column: 2 / -1; position: relative; margin-top: 12px; min-width: 0; }
+.carousel .label-sm { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 10px; }
+.track { max-width: 100%; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+.track img { height: 360px; width: auto; flex: none; border-radius: 14px; border: 1px solid var(--line); scroll-snap-align: start; background: var(--panel); display: block; }
+.cbtn { display: none; position: absolute; top: 50%; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: rgba(8,12,18,.92); color: var(--ink); font-size: 18px; cursor: pointer; transform: translateY(-50%); }
+.cbtn:hover { border-color: var(--accent); color: var(--accent); }
+.cbtn.prev { left: -12px; } .cbtn.next { right: -12px; }
+.js .cbtn { display: block; }
+
+/* Contacto */
+.contact { text-align: center; padding: 96px 0 24px; }
+.contact h2 { font-size: clamp(30px, 5vw, 48px); letter-spacing: -.03em; line-height: 1.1; margin: 0 0 14px; }
+.contact p { color: var(--muted); margin: 0 0 28px; }
+.contact .mail { font-size: clamp(20px, 4.5vw, 30px); font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--accent); word-break: break-word; }
+.contact .mail:hover { color: var(--accent); }
+.contact .links { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 28px; margin-top: 28px; color: var(--muted); }
+.contact .links a:hover { color: var(--accent); }
+
+footer { padding: 40px 0 48px; color: var(--muted); font-size: 13.5px; text-align: center; }
+
+@media (max-width: 860px) {
+  .hero .wrap, .two { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .hero .wrap { padding-top: 56px; padding-bottom: 56px; }
+  .project { grid-template-columns: minmax(0, 1fr); }
+  .project .n { font-size: 20px; }
+  .project > div:not(.n):not(.carousel):not(.flow), .flow, .more { grid-column: 1; }
+  .mb { grid-template-columns: minmax(0, 1fr); gap: 20px; padding: 18px; }
+  .fl { flex-direction: column; align-items: stretch; gap: 4px; }
+  .fn, .fg { flex: none; max-width: none; }
+  .fa { width: auto; height: 30px; }
+  .fa .h { display: none; }
+  .fa .v { display: grid; }
+  .carousel { grid-column: 1; }
+  .track img { height: 280px; }
+  .js .cbtn { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .track { scroll-behavior: auto; } .project .n { transition: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="logo" href="#inicio">Ángel Belzunce</a>
+    <nav aria-label="Secciones">
+      <a href="#tecnologias">Tecnologías</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="hero" id="inicio">
+    <div class="wrap">
+      <div>
+        <div class="namerow">
+          <h1>Ángel<br>Belzunce</h1>
+        <div class="hicons">
+            <a href="https://github.com/angelbelzunce" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.38 7.86 10.9.58.1.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.04-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.42-2.69 5.39-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></a>
+            <a href="https://linkedin.com/in/angelbelzunce" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg></a>
+            <a class="cvb" href="CV_Angel_Belzunce.pdf" download aria-label="Descargar CV"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-4.5-4.5M12 15l4.5-4.5M4 20h16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Descargar CV (pdf)</a>
+          </div>
+        </div>
+        <p class="role">Desarrollador backend</p>
+        <p class="lead">Soy Técnico Superior en Desarrollo de Aplicaciones Multiplataforma y me dedico al desarrollo backend con Java y Spring Boot. Diseño APIs bien estructuradas, con datos consistentes y pruebas automáticas. También tengo perfil full stack: desarrollo aplicaciones móviles con Flutter y sus servicios en la nube, y me ocupo de todo el ciclo, desde el diseño hasta la publicación.</p>
+        <div class="actions">
+          <a class="btn primary" href="#proyectos">Ver proyectos</a>
+          <a class="btn ghost" href="#contacto">Contacto</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div>
+      <section id="tecnologias">
+        <p class="label">Tecnologías</p>
+        <div class="tgroup">
+          <h3>Base</h3>
+          <ul class="techs"><li><span class="ico"><img src="img/icons/java.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Java 21</span></li><li><span class="ico"><img src="img/icons/springboot.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Spring Boot</span></li><li><span class="ico"><img src="img/icons/spring-data.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Spring Data JPA</span></li><li><span class="ico"><img src="img/icons/postgresql.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">PostgreSQL</span></li><li><span class="ico"><img src="img/icons/git.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Git</span></li></ul>
+        </div>
+        <div class="tgroup">
+          <h3>Calidad y entrega</h3>
+          <ul class="techs"><li><span class="ico"><img src="img/icons/junit.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">JUnit</span></li><li><span class="ico"><img src="img/icons/mockito.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Mockito</span></li><li><span class="ico"><img src="img/icons/testcontainers.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Testcontainers</span></li><li><span class="ico"><img src="img/icons/docker.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Docker</span></li><li><span class="ico"><img src="img/icons/githubactions.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">GitHub Actions</span></li><li><span class="ico"><img src="img/icons/kafka.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Kafka</span></li></ul>
+        </div>
+        <div class="tgroup">
+          <h3>Full stack</h3>
+          <ul class="techs"><li><span class="ico"><img src="img/icons/flutter.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Flutter</span></li><li><span class="ico"><img src="img/icons/firebase.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Firebase</span></li><li><span class="ico"><img src="img/icons/typescript.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">TypeScript</span></li><li><span class="ico"><img src="img/icons/nodejs.svg" alt="" width="40" height="40" loading="lazy"></span><span class="tn">Node.js</span></li></ul>
+        </div>
+      </section>
+    </div>
+
+    <section id="proyectos">
+      <p class="label">Proyectos</p>
+      <article class="project">
+        <div class="n">01</div>
+        <div>
+          <h3>API Bancaria</h3>
+          <p>Microservicios de cuentas y notificaciones: transferencias idempotentes, control de concurrencia y comunicación por eventos.</p>
+          <p class="tech">Java 21 · Spring Boot · PostgreSQL · Kafka · Docker</p>
+          <a class="go" href="https://github.com/angelbelzunce/mini-banco">Ver código</a>
+        </div>
+        <div class="flow" role="img" aria-label="Cliente, servicio de cuentas con PostgreSQL, Kafka y servicio de notificaciones"><ol class="fl"><li class="fn"><span class="fi"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#475569"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#475569"/></svg></span><span class="ft"><b>Cliente</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fg"><ul><li class="fn"><span class="fi"><img src="img/icons/springboot.svg" alt="" width="26" height="26"></span><span class="ft"><b>Servicio de cuentas</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2v20M6 7l6-5 6 5M6 17l6 5 6-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2v20M6 7l6-5 6 5M6 17l6 5 6-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/postgresql.svg" alt="" width="26" height="26"></span><span class="ft"><b>PostgreSQL</b></span></li></ul></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/kafka.svg" alt="" width="26" height="26"></span><span class="ft"><b>Kafka</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/springboot.svg" alt="" width="26" height="26"></span><span class="ft"><b>Servicio de notificaciones</b></span></li></ol></div>
+        <details class="more"><summary>Ver más</summary><div class="mb"><div><p class="mt">Funcionalidades</p><ul><li>Arquitectura de microservicios: servicio de cuentas y servicio de notificaciones.</li><li>Comunicación entre servicios mediante eventos en Kafka.</li><li>Transferencias idempotentes mediante la cabecera Idempotency-Key.</li><li>Control de concurrencia con bloqueo optimista.</li><li>Cálculo de comisiones con el patrón Strategy.</li></ul></div><div><p class="mt">Tecnologías y herramientas</p><ul class="chips"><li>Java 21</li><li>Spring Boot</li><li>Spring Data JPA</li><li>PostgreSQL</li><li>Kafka</li><li>Docker</li><li>Docker Compose</li><li>JUnit</li><li>Mockito</li><li>Testcontainers</li><li>GitHub Actions</li></ul></div></div></details>
+      </article>
+      <article class="project">
+        <div class="n">02</div>
+        <div>
+          <h3>Gastos Compartidos</h3>
+          <p>API REST para repartir gastos: grupos, invitaciones y pagos.</p>
+          <p class="tech">Java · Spring Boot · JPA · PostgreSQL</p>
+          <a class="go" href="https://github.com/angelbelzunce/shared-expenses-api">Ver código</a>
+        </div>
+        <div class="flow" role="img" aria-label="Cliente, API Spring Boot y PostgreSQL"><ol class="fl"><li class="fn"><span class="fi"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="#475569"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7z" fill="#475569"/></svg></span><span class="ft"><b>Cliente</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" fill="#475569"/><path d="M8 11V8a4 4 0 0 1 8 0v3" fill="none" stroke="#475569" stroke-width="2.4" stroke-linecap="round"/></svg></span><span class="ft"><b>Seguridad JWT</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/springboot.svg" alt="" width="26" height="26"></span><span class="ft"><b>API REST</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/postgresql.svg" alt="" width="26" height="26"></span><span class="ft"><b>PostgreSQL</b></span></li></ol></div>
+              <details class="more"><summary>Ver más</summary><div class="mb"><div><p class="mt">Funcionalidades</p><ul><li>Usuarios y grupos con sus miembros.</li><li>Autenticación con JWT y contraseñas cifradas con BCrypt (Spring Security).</li><li>Roles dentro del grupo: admin o member.</li><li>Invitaciones a grupos que se pueden aceptar o rechazar.</li><li>Pagos organizados por estado.</li><li>Validación de datos con @Valid y errores centralizados con @RestControllerAdvice.</li><li>Arquitectura por capas.</li></ul></div><div><p class="mt">Tecnologías y herramientas</p><ul class="chips"><li>Java</li><li>Spring Boot</li><li>Spring Security</li><li>JWT</li><li>Spring Data JPA</li><li>PostgreSQL</li><li>Flyway</li><li>OpenAPI (Swagger)</li><li>REST</li></ul></div></div></details>
+      </article>
+      <article class="project">
+        <div class="n">03</div>
+        <div>
+          <h3>myRoutine</h3>
+          <p>App Android para planificar la semana de entrenamiento, registrar series y seguir la evolución de la fuerza. En fase de lanzamiento en Google Play.</p>
+          <p class="tech">Flutter · Firebase · Cloud Functions · Google Play Billing</p>
+          <a class="go" href="https://myroutinefit.com">Ver web</a>
+        </div>
+        <div class="flow" role="img" aria-label="App Flutter, Firebase, Cloud Functions y Google Play"><ol class="fl"><li class="fn"><span class="fi"><img src="img/icons/flutter.svg" alt="" width="26" height="26"></span><span class="ft"><b>App Flutter</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 12h20M7 6l-5 6 5 6M17 6l5 6-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2v20M6 7l6-5 6 5M6 17l6 5 6-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/firebase.svg" alt="" width="26" height="26"></span><span class="ft"><b>Firebase</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 12h20M7 6l-5 6 5 6M17 6l5 6-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2v20M6 7l6-5 6 5M6 17l6 5 6-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/firebase.svg" alt="" width="26" height="26"></span><span class="ft"><b>Cloud Functions</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M3 12h18M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v18M5 14l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="ft"><b>Google Play</b></span></li></ol></div>
+        <div class="carousel" data-carousel>
+          <p class="label-sm">Capturas de la app</p>
+          <button class="cbtn prev" type="button" aria-label="Capturas anteriores">←</button>
+          <div class="track" tabindex="0" aria-label="Capturas de la app"><img src="img/myroutine/1.webp" alt="Plan semanal" width="360" height="760" decoding="async"><img src="img/myroutine/2.webp" alt="Registro de series" width="360" height="760" decoding="async"><img src="img/myroutine/3.webp" alt="Evolución de fuerza" width="360" height="760" decoding="async"><img src="img/myroutine/4.webp" alt="Estadísticas de progreso" width="360" height="760" decoding="async"><img src="img/myroutine/5.webp" alt="Planes predefinidos" width="360" height="760" decoding="async"><img src="img/myroutine/6.webp" alt="Logros por grupo muscular" width="360" height="760" decoding="async"><img src="img/myroutine/7.webp" alt="Historial de entrenamientos" width="360" height="760" decoding="async"><img src="img/myroutine/8.webp" alt="Compartir entrenamiento" width="360" height="760" decoding="async"></div>
+          <button class="cbtn next" type="button" aria-label="Capturas siguientes">→</button>
+        </div>
+              <details class="more"><summary>Ver más</summary><div class="mb"><div><p class="mt">Funcionalidades</p><ul><li>Planificación semanal del entrenamiento.</li><li>Registro de series con repeticiones, peso y RIR.</li><li>Seguimiento de la evolución de la fuerza y del volumen semanal.</li><li>Inicio de sesión y datos de usuario en la nube.</li><li>Cobros con Google Play Billing, verificados en el servidor.</li><li>Gestión del estado de la app con Provider.</li></ul></div><div><p class="mt">Tecnologías y herramientas</p><ul class="chips"><li>Flutter</li><li>Provider</li><li>Firebase Authentication</li><li>Firestore</li><li>Crashlytics</li><li>Remote Config</li><li>Cloud Functions</li><li>Google Play Billing</li></ul></div></div></details>
+      </article>
+      <article class="project">
+        <div class="n">04</div>
+        <div>
+          <h3>Rently</h3>
+          <p>Aplicación para gestionar propiedades en alquiler: contratos, pagos y roles de propietario y agente.</p>
+          <p class="tech">Flutter · Firebase</p>
+        </div>
+        <div class="flow" role="img" aria-label="App Flutter y Firebase"><ol class="fl"><li class="fn"><span class="fi"><img src="img/icons/flutter.svg" alt="" width="26" height="26"></span><span class="ft"><b>App Flutter</b></span></li><li class="fa" aria-hidden="true"><b class="h"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M2 12h20M7 6l-5 6 5 6M17 6l5 6-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b><b class="v"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2v20M6 7l6-5 6 5M6 17l6 5 6-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></b></li><li class="fn"><span class="fi"><img src="img/icons/firebase.svg" alt="" width="26" height="26"></span><span class="ft"><b>Firebase</b></span></li></ol></div>
+        <div class="carousel" data-carousel>
+          <p class="label-sm">Capturas de la app</p>
+          <button class="cbtn prev" type="button" aria-label="Capturas anteriores">←</button>
+          <div class="track" tabindex="0" aria-label="Capturas de la app"><img src="img/rently/1.webp" alt="Inicio de sesión" width="320" height="664" decoding="async"><img src="img/rently/2.webp" alt="Detalle de contrato" width="320" height="664" decoding="async"><img src="img/rently/3.webp" alt="Resumen del mes" width="320" height="664" decoding="async"><img src="img/rently/4.webp" alt="Espacios de trabajo" width="320" height="632" decoding="async"><img src="img/rently/5.webp" alt="Listado de propiedades" width="320" height="664" decoding="async"><img src="img/rently/6.webp" alt="Detalle de abono" width="320" height="664" decoding="async"><img src="img/rently/7.webp" alt="Listado de contratos" width="320" height="664" decoding="async"><img src="img/rently/8.webp" alt="Nuevo contrato" width="320" height="664" decoding="async"></div>
+          <button class="cbtn next" type="button" aria-label="Capturas siguientes">→</button>
+        </div>
+              <details class="more"><summary>Ver más</summary><div class="mb"><div><p class="mt">Funcionalidades</p><ul><li>Gestión de propiedades en alquiler.</li><li>Contratos y mensualidades.</li><li>Roles de propietario y agente.</li><li>Espacios de trabajo e invitaciones.</li><li>Gestión del estado de la app con Riverpod.</li></ul></div><div><p class="mt">Tecnologías y herramientas</p><ul class="chips"><li>Flutter</li><li>Riverpod</li><li>Firebase Authentication</li><li>Firestore</li><li>Firebase Hosting</li></ul></div></div></details>
+      </article>
+    </section>
+
+    <section id="contacto" class="contact">
+      <h2>¿Hablamos?</h2>
+      <p>Escríbeme y te respondo lo antes posible.</p>
+      <a class="mail" href="mailto:angelbelzunce@gmail.com">angelbelzunce@gmail.com</a>
+      <div class="links">
+        <a href="https://github.com/angelbelzunce">GitHub</a>
+        <a href="https://linkedin.com/in/angelbelzunce">LinkedIn</a>
+        <a href="CV_Angel_Belzunce.pdf">Currículum (PDF)</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>© 2026 Ángel Belzunce</footer>
+<script>
+(function () {
+  document.documentElement.classList.add('js');
+  Array.prototype.forEach.call(document.querySelectorAll('[data-carousel]'), function (c) {
+    var t = c.querySelector('.track');
+    function go(d) { t.scrollBy({ left: d * Math.max(240, t.clientWidth * 0.8), behavior: 'smooth' }); }
+    c.querySelector('.prev').addEventListener('click', function () { go(-1); });
+    c.querySelector('.next').addEventListener('click', function () { go(1); });
+  });
+})();
+</script>
+</body>
+</html>
