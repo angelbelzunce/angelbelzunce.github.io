@@ -97,7 +97,7 @@ section { padding: 64px 0 0; }
 .two { display: grid; grid-template-columns: 1fr 1.15fr; gap: 56px; }
 .about p:not(.label) { margin: 0; font-size: 19px; line-height: 1.7; max-width: 28em; }
 .tgroup { margin-bottom: 28px; }
-.tgroup h3 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 10px; }
+.tgroup h3 { font-size: 13px; font-weight: 600; color: var(--muted); margin: 0 0 16px; min-height: 16px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
 .chips li { font-size: 14px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); }
 .chips.base li { border-color: rgba(227,185,60,.5); color: var(--accent); }
@@ -187,9 +187,10 @@ section { padding: 64px 0 0; }
 .carousel .label-sm { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 10px; }
 .track { max-width: 100%; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
 .track img { width: calc((100% - 42px) / 4); height: auto; flex: none; border-radius: 14px; border: 1px solid var(--line); scroll-snap-align: start; background: var(--panel); display: block; }
-.cbtn { display: none; position: absolute; top: 50%; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: rgba(8,12,18,.92); color: var(--ink); font-size: 18px; cursor: pointer; transform: translateY(-50%); }
+.cbtn { display: none; position: absolute; top: -9px; z-index: 2; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; line-height: 1; cursor: pointer; transition: opacity .15s, border-color .15s, color .15s; }
 .cbtn:hover { border-color: var(--accent); color: var(--accent); }
-.cbtn.prev { left: -12px; } .cbtn.next { right: -12px; }
+.cbtn.prev { right: 42px; } .cbtn.next { right: 0; }
+.cbtn.off { opacity: 0; pointer-events: none; }
 .js .cbtn { display: block; }
 
 /* Contacto */
@@ -378,9 +379,21 @@ footer { padding: 40px 0 48px; color: var(--muted); font-size: 13.5px; text-alig
   document.documentElement.classList.add('js');
   Array.prototype.forEach.call(document.querySelectorAll('[data-carousel]'), function (c) {
     var t = c.querySelector('.track');
+    var prev = c.querySelector('.prev'), next = c.querySelector('.next');
     function go(d) { t.scrollBy({ left: d * (t.clientWidth + 14), behavior: 'smooth' }); }
-    c.querySelector('.prev').addEventListener('click', function () { go(-1); });
-    c.querySelector('.next').addEventListener('click', function () { go(1); });
+    function upd() {
+      var max = t.scrollWidth - t.clientWidth;
+      prev.classList.toggle('off', t.scrollLeft <= 2);
+      next.classList.toggle('off', max <= 2 || t.scrollLeft >= max - 2);
+    }
+    prev.addEventListener('click', function () { go(-1); });
+    next.addEventListener('click', function () { go(1); });
+    t.addEventListener('scroll', upd, { passive: true });
+    window.addEventListener('resize', upd);
+    var d = c.closest('details');
+    if (d) d.addEventListener('toggle', function () { setTimeout(upd, 30); });
+    Array.prototype.forEach.call(t.querySelectorAll('img'), function (i) { i.addEventListener('load', upd); });
+    upd();
   });
 })();
 
